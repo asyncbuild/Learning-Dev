@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+    <script>
+        async function signup(){
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+            const response = await axios.post('http://localhost:3000/signup',{
+                username:username,
+                password:password
+            })
+            // alert("signup is done")
+        }
+
+        async function signin(){
+            const username = document.getElementById('signin-username').value;
+            const password = document.getElementById('signin-password').value;
+            const response = await axios.post('http://localhost:3000/signin',{
+                username:username,
+                password:password
+            })
+            localStorage.setItem('token',response.data.token)
+            await getInfo()
+            // alert("signin is done")
+        }
+        
+        async function getInfo() {
+            const token = localStorage.getItem("token");
+            const response = await axios.get('http://localhost:3000/me',{
+                    headers: {
+                    token: token
+                }
+            })
+
+            document.querySelector('.userInfo').innerHTML = `User : ${response.data.username}`
+        }
+
+
+        async function logout(){
+            localStorage.removeItem('token')
+            document.querySelector('.userInfo').innerHTML = `User : `
+        }
+
+    </script>
+</head>
+<body>
+    <div>
+        <input id="signup-username" type="text" name="username" placeholder="Username">
+        <input id="signup-password" type="password" name="password" id="signup" placeholder="Password">
+        <button onclick=signup() >Signup</button>
+    </div>
+    <div class="signin">
+        <input id="signin-username"  type="text" name="username" placeholder="Username">
+        <input id="signin-password" type="password" name="password" id="signin" placeholder="Password">
+        <button onclick=signin() >Signin</button>
+    </div>
+    <div>
+        <h3 class="userInfo">User : </h3>
+    </div>
+    <button onclick=logout() >Logout</button>
+</body>
+</html>
