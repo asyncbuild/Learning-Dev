@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+    <script>
+        async function getUser() {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                window.location.href = 'signup.html'
+                return
+            }
+            try {
+                const response = await axios.get('http://localhost:3000/me', {
+                    headers: {
+                        token: token
+                    }
+                })
+                document.getElementById("user").innerText = response.data.username;
+            } catch (error) {
+                localStorage.removeItem('token');
+                window.location.href = 'signin.html';
+            }
+        }
+
+        async function getTodos() {
+            const token = localStorage.getItem('token')
+            try {
+                const response = await axios.get('http://localhost:3000/todos', {
+                    headers: {
+                        token: token
+                    }
+                })
+                const todos = response.data.todos
+                const todoList = document.getElementById('todoList')
+                todoList.innerHTML = ''
+
+                todos.forEach(todo => {
+                    const li = document.createElement('li')
+                    const titleStyle = todo.done ? "text-decoration : line-through" : "";
+                    li.innerHTML = ` 
+                    <span id="title-${todo.id}" style="${todo.done ? 'text-decoration: line-through' : ''}">${todo.title}</span>
+                    <button onclick="editTodo(${todo.id},${todo.title})">Edit</button>
+                    <button onclick ="updateTodo(${todo.id},${todo.done})" style="margin-left: 10px;"> Toggle </button>
+                    <button onclick="deleteTodo(${todo.id})" style="margin-left: 10px;">Delete</button> `,
+                        todoList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Something went wrong ', error);
+            }
+
+        }
+
+        function editTodo(id,currentTitle){
+            const titleSpan = document.getElementById(`title-${id}`);
+            titleSpan.innerHTML = `
+                <input id="input-${id}" value="${currentTitle}" />
+                <button onclick="saveTitle(${id})">Save</button>
+            `;
+        }
+
+        async function addTodo() {
+            const token = localStorage.getItem('token')
+            const title = document.getElementById('todoInput').value;
+            if (!token) {
+                window.location.href = 'signup.html'
+                return
+            }
+            try {
+                const response = await axios.post('http://localhost:3000/add-todo',
+                    {
+                        title: title,
+                    },
+                    {
+                        headers: {
+                            token: token
+                        }
+                    })
+                document.getElementById('todoInput').value = '';
+                getTodos()
+            } catch (error) {
+                console.log("Something went wrong!", error)
+            }
+        }
+
+        async function updateTodo(id,currentDone) {
+            const token = localStorage.getItem('token')
+            try {
+                await axios.patch('http://localhost:3000/update-todo',
+                    {
+                        id:id,
+                        done:!currentDone
+                    },
+                    {
+                        headers:{
+                            token:token
+                        }
+                    }
+                )
+                getTodos();
+            } catch (error) {
+                console.error("Something went wrong while updating todo ",error);
+            }
+        }
+
+        async function saveTitle(id) {
+        const token = localStorage.getItem('token');
+        const newTitle = document.getElementById(`input-${id}`).value;
+            try {
+                await axios.patch('http://localhost:3000/update-todo',
+                    {
+                        id: id,
+                        title: newTitle
+                    },
+                    {
+                        headers: {
+                            token: token
+                        }
+                    }
+                );
+
+                getTodos();
+            } catch (error) {
+                console.error("Update failed", error);
+            }
+        }
+        async function deleteTodo(id) {
+            const token = localStorage.getItem('token')
+            console.log("logging id : ", id);
+            try {
+                await axios.delete('http://localhost:3000/delete-todo',
+                {
+                data: {
+                    id: id
+                }, 
+                headers: {
+                    token: token
+                }
+                }
+                )
+                getTodos();
+            } catch (error) {
+                console.error('Failed to delete todo ', error)
+            }
+        }
+
+
+        window.onload = function () {
+            getUser();
+            getTodos();
+        };
+    </script>
+</head>
+
+<body>
+    <h2>Welcome, <span id="user"></span></h2>
+
+    <button onclick="logout()">Logout</button>
+
+    <h3>Add Todo</h3>
+    <input id="todoInput" placeholder="New todo">
+    <button onclick="addTodo()">Add</button>
+
+    <ul id="todoList"></ul>
+</body>
+
+</html>
