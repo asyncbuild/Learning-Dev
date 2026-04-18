@@ -127,6 +127,7 @@
                 console.error("Update failed", error);
             }
         }
+        
         async function deleteTodo(id) {
             const token = localStorage.getItem('token')
             console.log("logging id : ", id);
@@ -146,7 +147,6 @@
                 console.error('Failed to delete todo ', error)
             }
         }
-
 
         window.onload = function () {
             getUser();
