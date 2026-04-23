@@ -3,20 +3,34 @@ const jwt = require('jsonwebtoken')
 
 const app = express()
 
-app.post('/signup',function(req,res){
-
+app.post('/user/signup',function(req,res){
+    res.json({
+        message : "Signup endpoint"
+    })
 })
 
-app.post('/signin',function(req,res){
-
+app.post('/user/signin',function(req,res){
+    res.json({
+        message : "Signin endpoint"
+    })
 })
 
-app.post('/buy-course',function(req,res){
-
+app.post('/user/purchases',function(req,res){
+    res.json({
+        message : "User purchases endpoint"
+    })
 })
 
-app.get('/get-courses',function(req,res){
+app.get('/course/purchase',function(req,res){
+    res.json({
+        message : "Course purchase endpoint"
+    })
+})
 
+app.get('/courses',function(req,res){
+    res.json({
+        message : "Courses endpoint"
+    })
 })
 
 app.listen(3000,()=>{
