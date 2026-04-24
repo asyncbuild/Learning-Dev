@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const courseRoute = Router()
+const { courseModel } = require('../db')
 
 courseRoute.get('/purchase',function(req,res){
     res.json({
