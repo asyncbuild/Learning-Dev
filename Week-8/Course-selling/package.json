@@ -3,14 +3,18 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.5.0"
+    "mongoose": "^9.5.0",
+    "nodemon": "^3.1.14",
+    "zod": "^4.3.6"
   },
   "name": "course-selling",
   "version": "1.0.0",
   "description": "- Initialize a new node.js project\r - add expres,jasonwebtoken to it as a dependency\r - create index.js\r - add route skeleton for user login, signup,purchase a course, see course\r - add routes for admin login,admin signup,create a course,delete a course, add course content\r - add middlewares for user and admin auth\r - add a database(mongodb), use dotenv to store the database connection string\r - define the schema for user, admin, course,purchase\r - complete the routes for user login,signup,purchase a course, see course (extra points - use expres routing to better structure your routes)\r - create the frontend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",

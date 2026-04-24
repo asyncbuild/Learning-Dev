@@ -7,7 +7,7 @@ const {adminRoute} = require('./routes/admin')
 const app = express()
 const mongoose = require('mongoose')
 const MONGODB_URL = process.env.MONGODB_CONNECTION_URL
-
+app.use(express.json())
 
 app.use('/api/v1/user',userRoute)
 app.use('/api/v1/admin',adminRoute)
