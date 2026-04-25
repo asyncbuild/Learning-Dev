@@ -1,7 +1,8 @@
 const { Router } = require('express')
 const adminRoute = Router()
-const { adminModel } = require('../db')
+const { adminModel, courseModel } = require('../db')
 const jwt = require('jsonwebtoken')
+const { adminMiddleware } = require('../middlewares/admin.js')
 const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_PASSWORD
 
 
@@ -57,10 +58,20 @@ adminRoute.post('/signin', async function(req,res){
     }
 })
 
-adminRoute.post('/course',function(req,res){
-    res.json({
-        message : "create course endpoint"
-    })
+adminRoute.post('/course',adminMiddleware,async function(req,res){
+    const adminId = req.adminId;
+
+    try {
+        const { title, description, imageurl, price } = req.body;
+    
+        const course = await courseModel.create({
+            title, description, imageUrl, price, creatorId: adminId
+        })
+    } catch (error) {
+        res.status(400).json({
+            message : "error while creating a course"
+        })
+    }
 })
 
 adminRoute.put('/course',function(req,res){
