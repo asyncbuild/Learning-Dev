@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const userRoute = Router()
-const { userModel } = require('../db')
+const { userModel, purchaseModel, courseModel } = require('../db')
+const { userMiddleware } = require('../middlewares/user.js')
 const jwt = require('jsonwebtoken')
 const JWT_USER_SECRET = process.env.JWT_USER_PASSWORD
 
@@ -59,10 +60,25 @@ userRoute.post('/signin',async function(req,res){
     
 })
 
-userRoute.post('/purchases',function(req,res){
-    res.json({
-        message : "User purchases endpoint"
-    })
+userRoute.post('/purchases',userMiddleware,async function(req,res){
+    const userId = req.userId;
+    try {
+        const purchasedCourses = await purchaseModel.find({
+            userId:userId
+        })
+        const coursesData = await courseModel.find({
+            _id : { $in : purchasedCourses.map(x => x.courseId)}
+        })
+        res.json({
+            message : "User purchases endpoint",
+            purchasedCourses:purchasedCourses,
+            coursesData:coursesData
+        })
+    } catch (error) {
+        res.status(400).json({
+            message : "Something faild"
+        })
+    }
 })
 
 module.exports = {
