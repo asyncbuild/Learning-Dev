@@ -78,10 +78,32 @@ adminRoute.post('/course',adminMiddleware,async function(req,res){
     }
 })
 
-adminRoute.put('/course',function(req,res){
-    res.json({
-        message : "change course endpoint"
-    })
+adminRoute.put('/course',adminMiddleware ,async function(req,res){
+    const adminId = req.adminId;
+
+    try {
+        const { title, description, imageUrl, price, courseId } = req.body;
+    
+        const course = await courseModel.updateOne( {
+            _id:courseId,
+            creatorId:adminId
+        },{
+            title, description, imageUrl, price
+        })
+        if(course.matchedCount === 0){
+            return res.status(404).json({
+                message: "Course not found or you don't have permission"
+            });
+        }
+        res.status(202).send({
+            courseId : course._id,
+            message: "Course successfully Updated"
+        })
+    } catch (error) {
+        res.status(400).json({
+            message : "error while updating a course"
+        })
+    }
 })
 
 adminRoute.get('/course/bulk',function(req,res){
