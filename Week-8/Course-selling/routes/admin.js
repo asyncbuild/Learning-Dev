@@ -62,10 +62,14 @@ adminRoute.post('/course',adminMiddleware,async function(req,res){
     const adminId = req.adminId;
 
     try {
-        const { title, description, imageurl, price } = req.body;
+        const { title, description, imageUrl, price } = req.body;
     
         const course = await courseModel.create({
             title, description, imageUrl, price, creatorId: adminId
+        })
+        res.status(202).send({
+            courseId : course._id,
+            message: "Course successfully created"
         })
     } catch (error) {
         res.status(400).json({
