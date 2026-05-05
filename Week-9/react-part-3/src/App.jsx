@@ -27,7 +27,10 @@ function PostComponent(){
     <div style={{fontSize:10,marginLeft:10}}>
       <b>100xdevs</b>
       <div>23,888 followers</div>
-      <div>12m</div>
+      <div  style={{display:"flex"}}>
+        <div >12m</div>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrpnI8Sc5HWqacwpAAYMTDIHDqVIcR6GCOeg&s" style={{height:20,width:20,paddingLeft:5}} />
+      </div>
     </div>
     </div>
     <div style={{fontSize:14}} >
