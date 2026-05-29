@@ -2,19 +2,24 @@ import { useState, useContext, createContext } from 'react'
 
 const BulbContext = createContext();
 
-function App() {
-  const [bulbOn, setBulbOn] = useState(true) 
+export function BulbProvider( {children} ){
+  const [bulbOn, setBulbOn] = useState(true);
+    return <BulbContext.Provider value={
+      {
+        bulbOn : bulbOn,
+        setBulbOn : setBulbOn
+      }
+    } >
+      {children}
+    </BulbContext.Provider>
+}
 
+function App() {
   return (
     <div>
-      <BulbContext.Provider value={
-        {
-          bulbOn : bulbOn,
-          setBulbOn : setBulbOn
-        }
-      } >
+      <BulbProvider>
         <Light/>
-      </BulbContext.Provider>
+      </BulbProvider>
     </div>
   )
 }
