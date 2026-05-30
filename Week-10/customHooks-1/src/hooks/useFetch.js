@@ -31,5 +31,9 @@ export function useFetch(url){
         getDetails();
     },[url])
 
+    useEffect(()=>{
+        setInterval(getDetails,10*1000)
+    })
+
     return {finalData,loading}
 }
