@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react"
-import { useFetch, usePost } from "./hooks/useFetch"
+import { useFetch } from "./hooks/useFetch"
  
 function App() {
   const [currentPost,setCurrentPost] = useState(1);
-  const post = useFetch(`https://jsonplaceholder.typicode.com/posts/${currentPost}`);
+  const {finalData,loading} = useFetch(`https://jsonplaceholder.typicode.com/posts/${currentPost}`);
+  if(loading){
+    return <div>Loading......</div>
+  }
   return (
     <div>
       {/*if u want to display an json object, JSON.stringify() it */ }
@@ -12,7 +15,7 @@ function App() {
       <button onClick={()=>setCurrentPost(2)} >2</button>
       <button onClick={()=>setCurrentPost(3)} >3</button>
       <br />
-      {post.title}
+      {finalData.title}
     </div>
   )
 }
