@@ -26,7 +26,7 @@ export function useFetch(url){
     
     useEffect(()=>{
         getDetails();
-    },[])
+    },[url])
 
     return finalData
 }
