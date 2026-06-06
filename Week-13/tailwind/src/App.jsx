@@ -4,7 +4,7 @@ function App() {
 
   return (
     <div>
-      <Otp/>
+      <Otp number={4}/>
     </div>
   )
 }

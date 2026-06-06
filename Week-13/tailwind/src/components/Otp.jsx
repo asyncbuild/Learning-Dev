@@ -1,68 +1,58 @@
 import { useRef, useState } from "react";
 
-export function Otp () {
-    const ref1 = useRef();
-    const ref2 = useRef();
-    const ref3 = useRef();
-    const ref4 = useRef();
-    const ref5 = useRef();
-    const ref6 = useRef();
-    const [disabled,setDisabled] = useState(true);
+export function Otp ({number}) {
+    const ref = useRef(Array(number).fill(0))
+    const [values,setValues] = useState(Array(number).fill(""))
+    const isDisabled = values.some((val)=> val === "")
     return (
         <div className="flex justify-center">
-            <SubOtpBox reference={ref1} onDone = {()=>{
-                ref2.current.focus();
-            }} onBack={()=>{}} />
-            <SubOtpBox reference={ref2} onDone = {()=>{
-                ref3.current.focus();
+            
+            {Array(number).fill(1).map((x,index) => <SubOtpBox key={index} 
+            index={index}
+            values={values}
+            setValues={setValues}
+            reference={(e)=>ref.current[index]=e}
+            onDone = {()=>{
+                if(index+1 >= number){
+                    return;
+                }
+                ref.current[index + 1].focus();
             }} onBack={()=>{
-                ref1.current.focus();
-            }} />
-            <SubOtpBox reference={ref3} onDone = {()=>{
-                ref4.current.focus();
-            }} onBack={()=>{
-                ref2.current.focus();
-            }} />
-            <SubOtpBox reference={ref4} onDone = {()=>{
-                ref5.current.focus();
-            }} onBack={()=>{
-                ref3.current.focus();
-            }} />
-            <SubOtpBox reference={ref5} onDone = {()=>{
-                ref6.current.focus();
-            }} onBack={()=>{
-                ref4.current.focus();
-            }} />
-            <SubOtpBox reference={ref6} onDone = {()=>{
-                setDisabled(false)
-            }} onBack={()=>{
-                ref5.current.focus();
-            }} />
-            <button disabled={disabled} >Submit</button>
+                if(index ==0){
+                    return
+                }
+                ref.current[index - 1].focus();
+            }} /> )}
+            
+            <button disabled={isDisabled} >Submit</button>
         </div>
     );
 };
 
 function SubOtpBox ({
-    reference,onDone,onBack
+    reference,onDone,onBack,index,values,setValues
 }){
-    const [inputBoxVal,setInputBoxVal] = useState("");
 
     return(
     <div>
         <input
-            value={inputBoxVal}
+            value={values[index]}
             ref={reference}
             maxLength={1}
             onKeyUp={(e)=>{
                 if(e.key == "Backspace"){
+                    const newValues = [...values]
+                    newValues[index] = ""
+                    setValues(newValues)
                     onBack();
                 }
             }}
             onChange={(e)=>{
                 const val = e.target.value
                 if(/^[0-9]$/.test(val)){ // checks if the value is a number between 0 and 9
-                    setInputBoxVal(val);
+                    const newValues = [...values];
+                    newValues[index] = val;
+                    setValues(newValues)
                     onDone();
                 }else {
 
