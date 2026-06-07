@@ -1,23 +1,29 @@
 import { useRef, useState } from "react";
 
 export function Otp ({number}) {
+
     const ref = useRef(Array(number).fill(0))
     const [values,setValues] = useState(Array(number).fill(""))
     const isDisabled = values.some((val)=> val === "")
+
     return (
         <div className="flex justify-center">
             
-            {Array(number).fill(1).map((x,index) => <SubOtpBox key={index} 
+            {Array(number).fill(1).map((x,index) => <SubOtpBox 
+            key={index} 
             index={index}
             values={values}
             setValues={setValues}
-            reference={(e)=>ref.current[index]=e}
+            reference={
+                (e)=>ref.current[index]=e
+            }
             onDone = {()=>{
                 if(index+1 >= number){
                     return;
                 }
                 ref.current[index + 1].focus();
-            }} onBack={()=>{
+            }} 
+            onBack={()=>{
                 if(index ==0){
                     return
                 }
