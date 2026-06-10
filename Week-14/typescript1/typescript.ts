@@ -3,7 +3,7 @@ function prob1(firstName : string){
     
 }
 
-//prob1("Deepesh")
+//prob1("asyncbuild")
 
 function prob2(num1 : number, num2 : number) : number{
     return num1 + num2;
@@ -15,6 +15,7 @@ function delayedCall(fn : () => void){
     setTimeout(fn, 2000);
 }
 
-delayedCall(function(){
-    console.log("This is a delayed call");
-})
+// delayedCall(function(){
+//     console.log("This is a delayed call");
+// })
+
