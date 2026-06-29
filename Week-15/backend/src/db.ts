@@ -1,9 +1,10 @@
 import {model, Model,Schema} from "mongoose"
+import mongoose from "mongoose"
 
-const UserModel = new Schema({
+const User = new Schema({
     username: {type:String,unique:true, required:true},
     password: {type:String, required:true}
 })
 
-export const UserModel = model("user",UserModel)
+export const UserModel = mongoose.model("user",User)
 
